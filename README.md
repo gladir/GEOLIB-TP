@@ -14,4 +14,8 @@ Liste des unités que contient la bibliothèque «GEOLIB-TP» :
       <td><b>GEOFUNC.PAS</b></td>
       <td>Cette unité contient des définitions et fonctions générales de géographies.</td>
   </tr>
+  <tr>
+    <td><b>POPUL.PAS</b></td>
+    <td>Cette unité contient les définitions, les procédures et les fonctions d'historique de population.</td>
+  </tr>  
 </table>
