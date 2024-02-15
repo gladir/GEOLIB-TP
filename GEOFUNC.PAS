@@ -8,13 +8,17 @@ Unit GEOFUNC;
 
 INTERFACE
 
-Function  KmToMiles(Km:Real):Real;
-Function  MilesToKm(Miles:Real):Real;
 Function  CountryToCapital(CountryName:String):String;
 Procedure CountryToCoord(CountryName:String;Var Latitude,LatiDeg:Byte;
                          Var LatiDirection:Char;Var Longitude,LongDeg:Byte;
                          Var LongDirection:Char);
 Function  CountryToSizeKm(CountryName:String):LongInt;
+Function  KmToMiles(Km:Real):Real;
+Function  LattitudeToReal(S:String):Real;
+Function  LattitudeToRealStr(S:String):String;
+Function  LongitudeToReal(S:String):Real;
+Function  LongitudeToRealStr(S:String):String;
+Function  MilesToKm(Miles:Real):Real;
 
 IMPLEMENTATION
 
@@ -2591,6 +2595,102 @@ Begin
    LongDirection:=Country[I].LongDirection;
    Exit;
   End;
+ End;
+End;
+
+Function LongitudeToReal(S:String):Real;
+Var
+ Minute,R:Real;
+ I:Integer;
+ Err:Word;
+ Num:String;
+Begin
+ Num:='';
+ For I:=1 to Length(S) do Begin
+  If Not(S[I]in['.','0'..'9'])Then Break;
+  Num:=Num+S[I];
+ End;
+ Val(Num,R,Err);
+ If I<Length(S)Then Begin
+  While(Not(S[I]in['.','0'..'9']))and(I<=Length(S))do Inc(I);
+  Num:='';
+  If I<Length(S)Then Begin
+   While(S[I]in['.','0'..'9'])and(I<=Length(S))do Begin
+    Num:=Num+S[I];
+    Inc(I);
+   End;
+   If Num<>''Then Begin
+    Val(Num,Minute,Err);
+    R:=R+Minute*((100/60)/100);
+   End;
+  End;
+ End;
+ If UpCase(S[Length(S)])in['O','W']Then R:=-R;
+ LongitudeToReal:=R;
+End;
+
+Function LongitudeToRealStr(S:String):String;
+Var
+ R:Real;
+ T:String;
+Begin
+ R:=LongitudeToReal(S);
+ If Frac(R)=0.0 Then Begin
+  Str(R:0:0,T);
+  LongitudeToRealStr:=T;
+ End
+  Else
+ Begin
+  Str(R:0:5,T);
+  LongitudeToRealStr:=T;
+ End;
+End;
+
+Function LattitudeToReal(S:String):Real;
+Var
+ Minute,R:Real;
+ I:Integer;
+ Err:Word;
+ Num:String;
+Begin
+ Num:='';
+ For I:=1 to Length(S) do Begin
+  If Not(S[I]in['.','0'..'9'])Then Break;
+  Num:=Num+S[I];
+ End;
+ Val(Num,R,Err);
+ If I<Length(S)Then Begin
+  While(Not(S[I]in['.','0'..'9']))and(I<=Length(S))do Inc(I);
+  Num:='';
+  If I<Length(S)Then Begin
+   While(S[I]in['.','0'..'9'])and(I<=Length(S))do Begin
+    Num:=Num+S[I];
+    Inc(I);
+   End;
+   If Num<>''Then Begin
+    Val(Num,Minute,Err);
+    R:=R+Minute*((100/60)/100);
+   End;
+  End;
+ End;
+ If UpCase(S[Length(S)])in['S']Then R:=-R;
+ LattitudeToReal:=R;
+End;
+
+Function LattitudeToRealStr(S:String):String;
+Var
+ R:Real;
+ T:String;
+Begin
+ R:=LattitudeToReal(S);
+ If Frac(R)=0.0 Then Begin
+  Str(R:0:0,T);
+  LattitudeToRealStr:=T;
+ End
+  Else
+ Begin
+  Str(R:0:5,T);
+  LattitudeToRealStr:=T;
  End;
 End;
 
